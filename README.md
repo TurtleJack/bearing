@@ -14,16 +14,41 @@ that reads files) starts every session knowing who pays and why this exists.
 
 Built in a two-hour window at a Portland hackathon. MIT licensed.
 
-## Run it
+![The report: verdict with reasoning trace, and your starting point drawn as a graph](docs/report-verdict.png)
+
+## Evaluate this in 90 seconds
 
 ```bash
 npm install
 npm run dev
 ```
 
+Then, in the browser (defaults to http://localhost:5173):
+
+1. Open **`/start`** and click **"Load a sample session → finished report in
+   one click."** No typing required — it seeds the bundled demo repo plus a
+   full set of prefilled answers, honestly labeled as a sample on the report.
+2. On the report: **hover the underlined verdict** — the reasoning trace quotes
+   the founder's own answers, not a model's opinion. Scroll to the **gap
+   report**: three ranked gaps, each with a reason and a rule ID; no score
+   anywhere, by design. Gap #1 is the product's own wedge: *your agents have
+   code context and zero business context.*
+3. Click **"Export the brain →"**, download `business-brain.zip`, and open any
+   file — every line was generated from the session's answers.
+4. Optional, the compounding beat: run it again from `/start` with a real
+   public repo that has a committed `business-brain/` folder, and watch gap #1
+   flip to satisfied — the product closes its own headline gap.
+
+To try it with your own answers instead: `/start` → paste any public GitHub
+repo (or "Use the demo repo") → 16 questions, about 8 minutes.
+
 No account, no API key, no server, no telemetry. Everything — classifier,
-rules engine, export — runs in the browser tab. The "Use the demo repo" button
-loads a bundled fixture, so the whole flow works offline.
+rules engine, export — runs in the browser tab, so the whole flow works
+offline.
+
+| The gap report | The export |
+| --- | --- |
+| ![Ranked gaps with reasons, never a score](docs/report-gaps.png) | ![business-brain/ files with copy buttons and zip download](docs/export.png) |
 
 ## What's real, what's stubbed
 
@@ -52,6 +77,8 @@ it learns. Judgment stays yours — Bearing never scores you, and when it didn't
 check something, it says so.
 
 ## Portland
+
+![Landing: your agents know your code, nothing knows your business](docs/landing.png)
 
 The target user is the Portland bench: indie hackers and senior engineers
 between roles, shipping agent-built side projects that work — with no recorded

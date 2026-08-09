@@ -9,6 +9,7 @@ import SignalLoader from '@ui/components/SignalLoader.jsx'
 import Wordmark from '@ui/components/Wordmark.jsx'
 import { clearRid, getRid, setRepoSignals, start } from '../lib/engine.js'
 import { demoRepoSignals, fetchRepoSignals, parseRepoUrl } from '../lib/github.js'
+import { loadSampleSession } from '../lib/sample.js'
 
 const PATH = [
   { index: '01', title: 'Point', detail: 'Point Bearing at a public GitHub repo — or run the bundled demo repo, no network needed.' },
@@ -62,6 +63,16 @@ export default function Start() {
   const startOver = () => {
     clearRid()
     window.location.reload()
+  }
+
+  // Evaluator shortcut: demo repo + prefilled answers → finished report.
+  async function sample(event) {
+    event?.preventDefault()
+    if (state === 'busy') return
+    setState('busy')
+    clearRid()
+    await loadSampleSession()
+    navigate('/report')
   }
 
   return (
@@ -161,6 +172,12 @@ export default function Start() {
                   Start over
                 </Button>
               </div>
+              <small style={{ display: 'block', marginTop: 12 }}>
+                Judging in a hurry?{' '}
+                <button type="button" onClick={sample} style={{ background: 'none', border: 0, padding: 0, color: 'inherit', textDecoration: 'underline', cursor: 'pointer', font: 'inherit' }}>
+                  Load a sample session → finished report in one click
+                </button>
+              </small>
             </section>
           ) : (
             <form className="fos-entry-card" onSubmit={begin}>
@@ -226,7 +243,10 @@ export default function Start() {
 
               <small>
                 Skip the repo and Bearing still works — the repo just makes the
-                gap report sharper.
+                gap report sharper. Judging in a hurry?{' '}
+                <button type="button" onClick={sample} style={{ background: 'none', border: 0, padding: 0, color: 'inherit', textDecoration: 'underline', cursor: 'pointer', font: 'inherit' }}>
+                  Load a sample session → finished report in one click
+                </button>
               </small>
             </form>
           )}
