@@ -49,7 +49,7 @@ Reading order: charter → business-model → gaps → decisions.
 **Who pays:** ${line(answers.b3) || '(not recorded — see gaps.md)'}
 
 **Stage:** ${line(answers.u1) || '(not recorded)'}
-${answers.a1 ? `\n**Provenance:** agents wrote ${answers.a1} of this codebase — context files are load-bearing here.\n` : ''}`
+${answers.a1 ? `\n**Provenance:** how much of the codebase agents wrote: ${answers.a1} — context files are load-bearing here.\n` : ''}`
 
   const tells = (v.trace ?? [])
     .sort((a, b) => b.weight - a.weight)
