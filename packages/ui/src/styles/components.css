@@ -1,0 +1,1066 @@
+/* ============================================================
+   Signal — shared components. Everything reads role tokens from
+   the enclosing Band, so the same component renders on either
+   surface.
+   ============================================================ */
+
+/* ---------- Band ---------- */
+.band {
+  background: var(--canvas);
+  color: var(--ink);
+}
+
+.band--grain {
+  background-image: radial-gradient(rgba(18, 33, 28, 0.03) 1px, transparent 1px);
+  background-size: 4px 4px;
+}
+
+/* Theme-following grain (D-0074): --grain is the paper texture on light and
+   `none` on dark, so one rule covers both modes. */
+.band--grain-auto {
+  background-image: var(--grain);
+  background-size: var(--paper-grain-size);
+}
+
+.band--seam {
+  border-top: 1px solid var(--hairline-catch);
+}
+
+/* ---------- Wordmark ---------- */
+.wordmark {
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35em; /* lockup 1a: ¼ mark width (mark is 1.4em → 0.35em) (D-0050) */
+}
+
+.wordmark__text {
+  white-space: nowrap;
+}
+
+/* Lockup 1a optical axis (D-0050): raise the text −0.145em so the mark centers
+   on the wordmark's x-height axis, not its cap-height center. Only when the
+   mark is present — a text-only wordmark (mark={false}) needs no offset. */
+.wordmark--marked .wordmark__text {
+  transform: translateY(-0.145em);
+}
+
+.wordmark b {
+  font-weight: 700;
+  color: var(--wordmark-iq); /* surface-constant brand sapphire (D-0049) */
+}
+
+/* Mark 8C rides the surface: the Band picks the variant, never a recolor. */
+/* Surface-matched mark: pick the variant from the NEAREST enclosing surface.
+   Custom-property inheritance resolves to the closest [data-surface] setter, so
+   a dark Band nested inside the light app root shows only the dark mark. A plain
+   descendant selector ([data-surface=light] .mark--on-light) instead matches
+   BOTH the light app root AND the nested dark Band, rendering two marks — the
+   /console double-mark bug. */
+.wordmark__mark {
+  flex: none;
+}
+
+.wordmark__mark--on-dark {
+  display: var(--wordmark-mark-dark, none);
+}
+
+.wordmark__mark--on-light {
+  display: var(--wordmark-mark-light, block);
+}
+
+/* ---------- Eyebrow ---------- */
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--faint);
+}
+
+.eyebrow--action {
+  color: var(--action-tint);
+}
+
+.eyebrow--signal {
+  color: var(--signal);
+}
+
+/* ---------- Mono chip (metadata layer) ---------- */
+.mono-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--ink-muted);
+  background: var(--surface-2);
+  border-radius: var(--radius-sm);
+  padding: 5px 10px;
+  white-space: nowrap;
+}
+
+[data-surface='light'] .mono-chip {
+  background: #eef1ec;
+  color: var(--faint);
+}
+
+.mono-chip--outline {
+  background: transparent;
+  border: 1px solid var(--hairline-strong);
+  border-radius: 10px;
+  font-size: 10px;
+  color: var(--faint);
+  padding: 3px 9px;
+}
+
+.mono-chip--accent {
+  background: transparent;
+  border: 1px solid color-mix(in srgb, var(--action-tint) 40%, transparent);
+  border-radius: 10px;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--action-tint);
+  padding: 4px 10px;
+}
+
+/* ---------- Buttons ---------- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-family: var(--font-sans);
+  font-size: 13px;
+  border-radius: var(--radius-md);
+  white-space: nowrap;
+  transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+
+.btn--primary {
+  background: var(--action);
+  color: #fff;
+  font-weight: 700;
+  padding: 11px 18px;
+}
+
+.btn--primary:hover {
+  background: var(--action-hover);
+}
+
+[data-surface='dark'] .btn--primary:hover {
+  background: #3a6fe6;
+}
+
+.btn--secondary {
+  background: transparent;
+  color: var(--ink);
+  font-weight: 600;
+  border: 1px solid var(--hairline-strong);
+  padding: 10px 17px;
+}
+
+.btn--secondary:hover {
+  border-color: var(--faint);
+}
+
+.btn--ghost {
+  background: transparent;
+  color: var(--action-tint);
+  font-weight: 600;
+  padding: 10px 4px;
+}
+
+.btn--ghost:hover {
+  color: var(--action-hover);
+}
+
+.btn--lg {
+  font-size: 14px;
+  padding: 13px 26px;
+}
+
+/* ---------- Confidence pill ---------- */
+.conf-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  border-radius: var(--radius-md);
+  border: 1px solid;
+  padding: 6px 11px;
+}
+
+.conf-pill .conf-pill__dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+.conf-pill--high {
+  color: var(--signal);
+  border-color: color-mix(in srgb, var(--signal) 50%, transparent);
+}
+
+.conf-pill--medium {
+  color: var(--warning);
+  border-color: color-mix(in srgb, var(--warning) 50%, transparent);
+}
+
+.conf-pill--low {
+  color: var(--error);
+  border-color: color-mix(in srgb, var(--error) 50%, transparent);
+}
+
+/* ---------- Flag ---------- */
+.flag {
+  border: 1px solid color-mix(in srgb, var(--flag-color) 40%, transparent);
+  background: color-mix(in srgb, var(--flag-color) 8%, transparent);
+  border-radius: 9px;
+  padding: 12px 14px;
+}
+
+.flag--error {
+  --flag-color: var(--error);
+}
+
+.flag--warning {
+  --flag-color: var(--warning);
+  background: color-mix(in srgb, var(--flag-color) 9%, transparent);
+}
+
+.flag--info {
+  --flag-color: var(--action-tint);
+}
+
+.flag__row {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+}
+
+.flag__dot {
+  flex: none;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--flag-color);
+  margin-top: 4px;
+}
+
+.flag__title {
+  font-weight: 700;
+  font-size: 13px;
+  color: var(--flag-color);
+}
+
+.flag__body {
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: var(--ink-muted);
+  margin-top: 4px;
+}
+
+.flag__actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.flag__actions .btn {
+  font-size: 11.5px;
+  padding: 5px 12px;
+  border-radius: 7px;
+  background: var(--surface);
+}
+
+/* ---------- Metric card ---------- */
+.metric-card {
+  background: var(--surface);
+  border: 1px solid var(--hairline);
+  border-radius: 9px;
+  padding: 12px 14px;
+}
+
+.metric-card__label {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--faint);
+}
+
+.metric-card__value {
+  font-weight: 700;
+  font-size: 20px;
+  font-variant-numeric: tabular-nums;
+  margin-top: 4px;
+  color: var(--ink);
+}
+
+.metric-card--signal {
+  border-color: color-mix(in srgb, var(--signal) 35%, transparent);
+}
+
+.metric-card--signal .metric-card__label,
+.metric-card--signal .metric-card__value {
+  color: var(--signal);
+}
+
+.metric-card--action .metric-card__value {
+  color: var(--action-tint);
+}
+
+/* ---------- Input + benchmark ---------- */
+.field {
+  background: var(--surface);
+  border: 1px solid var(--hairline);
+  border-radius: 9px;
+  padding: 12px 14px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+.field__label {
+  font-size: 13px;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  color: var(--ink);
+}
+
+.field__info {
+  position: relative;
+  font-family: var(--font-sans);
+  flex: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 1px solid var(--action-tint);
+  color: var(--action-tint);
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 14px;
+  text-align: center;
+  cursor: help;
+}
+
+.field__bench {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--faint);
+  background: var(--surface-2);
+  border-radius: 12px;
+  padding: 3px 9px;
+  white-space: nowrap;
+}
+
+[data-surface='light'] .field__bench {
+  background: #f0f2ee;
+}
+
+.field__controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.field__suggest {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--faint);
+  background: var(--surface-2);
+  border-radius: 12px;
+  padding: 4px 9px;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+[data-surface='light'] .field__suggest {
+  background: #f0f2ee;
+}
+
+.field__suggest:hover {
+  color: var(--action-tint);
+}
+
+.field__input {
+  width: 72px;
+  height: 32px;
+  border: 1px solid var(--hairline-strong);
+  border-radius: 7px;
+  background: var(--surface);
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--ink);
+  text-align: center;
+}
+
+[data-surface='light'] .field__input {
+  background: #fafbf9;
+}
+
+.field__input:focus {
+  outline: none;
+  border-color: var(--action);
+}
+
+/* ---------- Reasoning underline + trace popover ---------- */
+.rtrace {
+  position: relative;
+  border-bottom: 1.5px dotted var(--reasoning);
+  cursor: help;
+  color: var(--reasoning);
+}
+
+.rtrace--plain {
+  color: inherit;
+}
+
+/* Underline suppressed — for traces attached to a control, not a value */
+.rtrace--bare {
+  border-bottom: none;
+}
+
+.rtrace--strong {
+  border-bottom-width: 2px;
+}
+
+/* The trace popover is always a dark artifact, whatever band it sits in */
+.rtrace__pop {
+  position: absolute;
+  left: 0;
+  top: 145%;
+  text-align: left;
+  width: 260px;
+  background: var(--popover-bg);
+  border: 1px solid var(--popover-border);
+  border-radius: 9px;
+  padding: 12px 14px;
+  font-family: var(--font-sans);
+  font-size: 11.5px;
+  font-weight: 400;
+  font-style: normal;
+  letter-spacing: 0;
+  line-height: 1.5;
+  color: #b7cbc1;
+  text-transform: none;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.16s ease;
+  z-index: 9;
+  box-shadow: 0 18px 40px -16px rgba(0, 0, 0, 0.75);
+}
+
+.rtrace__pop b {
+  color: #f4f8f3;
+}
+
+.rtrace__pop-kicker {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 5px;
+}
+
+.rtrace:hover .rtrace__pop,
+.rtrace:focus-visible .rtrace__pop,
+.field__info:hover .rtrace__pop,
+.field__info:focus-visible .rtrace__pop {
+  opacity: 1;
+}
+
+.rtrace__pop--right {
+  left: auto;
+  right: 0;
+}
+
+/* ---------- Founder quote (serif, for their words only) ---------- */
+.founder-quote {
+  border-left: 2px solid var(--action);
+  padding: 2px 0 2px 16px;
+}
+
+.founder-quote__text {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 19px;
+  line-height: 1.42;
+  color: var(--ink);
+}
+
+.founder-quote__source {
+  margin-top: 9px;
+}
+
+/* ---------- Scenario chart ---------- */
+.scenario-chart__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.scenario-chart__legend {
+  display: flex;
+  gap: 16px;
+}
+
+.scenario-chart__key {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  color: var(--faint);
+}
+
+.scenario-chart__key--base {
+  color: var(--ink);
+  font-weight: 600;
+}
+
+.scenario-chart__swatch {
+  width: 14px;
+  height: 2px;
+}
+
+.scenario-chart svg {
+  width: 100%;
+  height: auto;
+  overflow: visible;
+  display: block;
+}
+
+/* ---------- Ticking figure ---------- */
+@keyframes tick-flash {
+  0% {
+    color: var(--action-tint);
+  }
+  100% {
+    color: inherit;
+  }
+}
+
+.tick-figure {
+  font-variant-numeric: tabular-nums;
+}
+
+.tick-figure--flash {
+  animation: tick-flash 0.9s ease-out;
+}
+
+/* ---------- Status line (confident loading) ---------- */
+@keyframes caret-blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+.status-line {
+  font-family: var(--font-mono);
+  color: var(--ink);
+}
+
+.status-line__caret {
+  display: inline-block;
+  width: 7px;
+  height: 1em;
+  background: var(--signal);
+  margin-left: 6px;
+  vertical-align: -0.12em;
+  animation: caret-blink 1s steps(1) infinite;
+}
+
+/* ---------- Signal Loader (D-0031 / CTX-85) ---------- */
+@keyframes jq-sonar {
+  0% {
+    transform: scale(0.4);
+    opacity: 0.55;
+  }
+  70% {
+    opacity: 0;
+  }
+  100% {
+    transform: scale(3.7);
+    opacity: 0;
+  }
+}
+
+@keyframes jq-arc {
+  0%,
+  100% {
+    opacity: 0.28;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes jq-dot {
+  0%,
+  100% {
+    opacity: 0.35;
+    transform: scale(0.7);
+  }
+  45% {
+    opacity: 1;
+    transform: scale(1.35);
+  }
+}
+
+@keyframes jq-node {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 0.85;
+  }
+  50% {
+    transform: scale(1.32);
+    opacity: 1;
+  }
+}
+
+@keyframes jq-blink {
+  0%,
+  45% {
+    opacity: 1;
+  }
+  50%,
+  100% {
+    opacity: 0;
+  }
+}
+
+.signal-loader {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.signal-loader--button {
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0;
+}
+
+.signal-loader__mark {
+  line-height: 0;
+}
+
+.signal-loader__sonar,
+.signal-loader__arc,
+.signal-loader__dot,
+.signal-loader__node {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.signal-loader__sonar {
+  animation: jq-sonar 2.8s ease-out infinite;
+}
+
+.signal-loader__arc {
+  animation: jq-arc 1.8s ease-in-out infinite;
+}
+
+.signal-loader__dot {
+  animation: jq-dot 1.8s ease-in-out infinite;
+}
+
+.signal-loader__node {
+  animation: jq-node 1.8s ease-in-out infinite;
+}
+
+.signal-loader__status {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  letter-spacing: 0.06em;
+  color: var(--ink-muted);
+  min-height: 18px;
+}
+
+.signal-loader__phrase {
+  transition: opacity 0.4s ease;
+}
+
+.signal-loader__caret {
+  width: 8px;
+  height: 16px;
+  background: var(--signal);
+  display: inline-block;
+  border-radius: 1px;
+  flex: none;
+  animation: jq-blink 1s step-end infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .jq-anim * {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  .signal-loader__phrase {
+    transition: none;
+  }
+
+  .signal-loader__caret {
+    animation: none;
+    opacity: 1;
+  }
+}
+
+/* One-shot pulse (CTX-88) — freeze after a sounding cycle */
+.signal-loader--once.signal-loader--settled .signal-loader__sonar,
+.signal-loader--once.signal-loader--settled .signal-loader__arc,
+.signal-loader--once.signal-loader--settled .signal-loader__dot,
+.signal-loader--once.signal-loader--settled .signal-loader__node {
+  animation: none !important;
+  opacity: 1 !important;
+  transform: none !important;
+}
+
+/* ---------- Waitlist form ---------- */
+.waitlist-form {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  align-items: stretch;
+  position: relative;
+}
+
+.waitlist-form__input {
+  flex: 1;
+  min-width: 240px;
+  max-width: 360px;
+  border: 1px solid var(--hairline-strong);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  color: var(--ink);
+  font: inherit;
+  font-size: 14px;
+  padding: 0 16px;
+}
+
+[data-surface='dark'] .waitlist-form__input {
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.waitlist-form__input:focus {
+  outline: none;
+  border-color: var(--action-tint);
+}
+
+.waitlist-form__input::placeholder {
+  color: var(--faint);
+}
+
+.waitlist-form--lg .waitlist-form__input {
+  font-size: 15px;
+  padding: 13px 16px;
+}
+
+.waitlist-form__trap {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.waitlist-form__error {
+  flex-basis: 100%;
+  font-size: 11px;
+  color: var(--error);
+}
+
+.waitlist-done {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 14.5px;
+  font-weight: 500;
+  color: var(--ink);
+  border: 1px solid color-mix(in srgb, var(--signal) 40%, transparent);
+  border-radius: var(--radius-md);
+  padding: 12px 18px;
+  max-width: 520px;
+  text-align: left;
+}
+
+.waitlist-done__signal {
+  flex: none;
+  gap: 0;
+}
+
+.waitlist-done__dot {
+  flex: none;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--signal);
+  box-shadow: 0 0 10px color-mix(in srgb, var(--signal) 70%, transparent);
+}
+
+/* ---------- Bathymetric motif ---------- */
+.bathymetric {
+  position: absolute;
+  pointer-events: none;
+}
+
+/* Shared marketing nav + footer (CTX-136, ADR 0016 §2) — one global header /
+   footer for the public site, distinct from the app shell. */
+.mkt-nav {
+  position: relative;
+  z-index: 50;
+  padding: 0;
+  border-bottom: 1px solid var(--hairline);
+  background: var(--canvas-deep);
+}
+
+.mkt-nav__row {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  min-height: 68px;
+  align-items: center;
+  gap: clamp(1.5rem, 4vw, 4.5rem);
+}
+
+.mkt-nav__home { display: inline-flex; color: inherit; text-decoration: none; }
+.mkt-nav__links {
+  display: flex;
+  align-items: center;
+  gap: clamp(1rem, 2.2vw, 1.8rem);
+}
+
+.mkt-nav__link {
+  color: var(--ink-muted);
+  text-decoration: none;
+  font-size: 0.78rem;
+  font-weight: 500;
+  transition: color 160ms ease;
+}
+
+.mkt-nav__link:hover { color: var(--ink); }
+
+.mkt-nav__actions {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+}
+
+.mkt-nav__actions > .btn {
+  min-height: 36px;
+  padding: 0 0.85rem;
+  font-size: 0.72rem;
+}
+
+.mkt-nav__signin {
+  color: var(--faint);
+}
+
+.mkt-nav__mobile {
+  display: none;
+}
+
+.mkt-footer {
+  position: relative;
+  z-index: 14;
+  padding: 0;
+  border-top: 1px solid var(--hairline);
+  background:
+    radial-gradient(circle at 12% 25%, rgba(95, 134, 238, 0.09), transparent 26%),
+    var(--canvas-deep);
+}
+
+.mkt-footer__main {
+  display: grid;
+  grid-template-columns: minmax(220px, 0.85fr) minmax(0, 2.15fr);
+  gap: clamp(3rem, 8vw, 8rem);
+  padding-top: clamp(4rem, 7vw, 6.5rem);
+  padding-bottom: clamp(3.5rem, 6vw, 5.5rem);
+}
+
+.mkt-footer__brand > a:first-child {
+  display: inline-flex;
+  color: inherit;
+  text-decoration: none;
+}
+
+.mkt-footer__brand p {
+  max-width: 26ch;
+  margin: 1.15rem 0 0;
+  color: var(--ink-muted);
+  font-size: 0.9rem;
+  line-height: 1.55;
+}
+
+.mkt-footer__waitlist {
+  display: inline-block;
+  margin-top: 1.5rem;
+  color: var(--action-tint);
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.04em;
+  text-decoration: none;
+}
+
+.mkt-footer__groups {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: clamp(1.2rem, 3vw, 3rem);
+}
+
+.mkt-footer__groups > div {
+  display: grid;
+  align-content: start;
+  gap: 0.72rem;
+}
+
+.mkt-footer__groups span {
+  margin-bottom: 0.25rem;
+  color: var(--action-tint);
+  font-family: var(--font-mono);
+  font-size: 0.58rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.mkt-footer__groups a {
+  width: fit-content;
+  color: var(--ink-muted);
+  font-size: 0.75rem;
+  text-decoration: none;
+  transition: color 160ms ease;
+}
+
+.mkt-footer__groups a:hover {
+  color: var(--ink);
+}
+
+.mkt-footer__bottom {
+  display: flex;
+  min-height: 62px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  border-top: 1px solid var(--hairline);
+  color: var(--faint);
+  font-family: var(--font-mono);
+  font-size: 0.56rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+@media (max-width: 920px) {
+  .mkt-nav__row {
+    grid-template-columns: auto 1fr;
+  }
+
+  .mkt-nav__links,
+  .mkt-nav__signin {
+    display: none;
+  }
+
+  .mkt-nav__actions {
+    justify-self: end;
+  }
+
+  .mkt-nav__mobile {
+    position: relative;
+    display: block;
+  }
+
+  .mkt-nav__mobile summary {
+    padding: 0.55rem 0.7rem;
+    border: 1px solid var(--hairline);
+    border-radius: var(--radius-md);
+    color: var(--ink-muted);
+    font-family: var(--font-mono);
+    font-size: 0.62rem;
+    cursor: pointer;
+    list-style: none;
+  }
+
+  .mkt-nav__mobile summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .mkt-nav__mobile[open] summary {
+    color: var(--ink);
+  }
+
+  .mkt-nav__mobile nav {
+    position: absolute;
+    top: calc(100% + 0.55rem);
+    right: 0;
+    display: grid;
+    width: min(270px, calc(100vw - 2rem));
+    padding: 0.65rem;
+    border: 1px solid var(--hairline);
+    border-radius: 12px;
+    background: var(--surface);
+    box-shadow: var(--shadow-overlay);
+  }
+
+  .mkt-nav__mobile nav a {
+    padding: 0.75rem;
+    border-radius: var(--radius-md);
+    color: var(--ink-muted);
+    font-size: 0.78rem;
+    text-decoration: none;
+  }
+
+  .mkt-nav__mobile nav a:hover {
+    color: var(--ink);
+    background: var(--surface-2);
+  }
+
+  .mkt-footer__main {
+    grid-template-columns: 1fr;
+    gap: 3.5rem;
+  }
+}
+
+@media (max-width: 660px) {
+  .mkt-nav__waitlist {
+    display: none;
+  }
+
+  .mkt-footer__groups {
+    grid-template-columns: 1fr 1fr;
+    gap: 2.5rem 1.25rem;
+  }
+
+  .mkt-footer__bottom {
+    padding-block: 1.1rem;
+    align-items: flex-start;
+    flex-direction: column;
+    justify-content: center;
+  }
+}

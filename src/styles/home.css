@@ -1,0 +1,594 @@
+/* ============================================================
+   Homepage styles — dark/light band composition
+   and recomposed as dark/light bands: a dark hero that lands the
+   promise, light bands for the reading, a dark band for the
+   numbers, a dark close for the ask.
+   ============================================================ */
+
+.home-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 18px 0;
+}
+
+.home-nav__links {
+  display: flex;
+  align-items: center;
+  gap: 22px;
+}
+
+.home-nav__link {
+  font-size: 13px;
+  color: var(--ink-muted);
+}
+
+.home-nav__link:hover {
+  color: var(--ink);
+}
+
+.home-hero {
+  position: relative;
+  overflow: hidden;
+}
+
+.home-hero__signal {
+  position: absolute;
+  top: 72px;
+  right: 8%;
+  z-index: 0;
+  opacity: 0.55;
+  pointer-events: none;
+}
+
+.home-hero__inner {
+  position: relative;
+  padding: 84px 0 92px;
+  max-width: 760px;
+}
+
+.home-hero__inner--enter {
+  animation: home-hero-enter 0.55s ease both;
+}
+
+@keyframes home-hero-enter {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .home-hero__inner--enter {
+    animation: none;
+  }
+
+  .home-hero__signal {
+    opacity: 0.35;
+  }
+}
+
+.home-hero__sub {
+  font-size: clamp(16px, 2vw, 18px);
+  line-height: 1.6;
+  color: var(--ink-muted);
+  max-width: 620px;
+  margin: 22px 0 36px;
+}
+
+.home-hero__sub b {
+  color: var(--ink);
+  font-weight: 600;
+}
+
+.cta-row {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.home-sec {
+  padding: 84px 0;
+}
+
+.home-sec + .home-sec {
+  border-top: 1px solid var(--hairline);
+}
+
+.home-sec .h2 {
+  margin: 14px 0 18px;
+}
+
+.lede {
+  font-size: 16px;
+  line-height: 1.62;
+  color: var(--ink-muted);
+  max-width: 640px;
+  margin: 0;
+}
+
+.lede b,
+.lede em {
+  color: var(--ink);
+}
+
+/* Amnesia moments — the mono metadata layer doing narrative work */
+.zero-row {
+  display: flex;
+  gap: 10px;
+  margin-top: 44px;
+  flex-wrap: wrap;
+}
+
+.zero {
+  flex: 1;
+  min-width: 220px;
+  background: var(--surface);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-md);
+  padding: 14px 16px;
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: var(--ink-muted);
+  box-shadow: var(--shadow-raised);
+}
+
+.zero b {
+  display: block;
+  color: var(--warning);
+  font-weight: 600;
+  margin-bottom: 4px;
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+/* Engine cards */
+.engine-cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-top: 46px;
+}
+
+.engine-card {
+  background: var(--surface);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-lg);
+  padding: 28px 26px;
+  box-shadow: var(--shadow-raised);
+}
+
+.engine-card h3 {
+  margin: 12px 0 10px;
+}
+
+.engine-card p {
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--ink-muted);
+  margin: 0;
+}
+
+.engine-card code {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--action);
+  background: color-mix(in srgb, var(--action) 8%, transparent);
+  padding: 1px 6px;
+  border-radius: 4px;
+}
+
+/* Receipts — hero numbers on dark */
+.metrics {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-top: 46px;
+}
+
+.metric {
+  background: linear-gradient(180deg, #1c3128 0%, #142219 100%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-top: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: var(--radius-lg);
+  padding: 32px 30px;
+}
+
+.metric__big {
+  font-size: clamp(38px, 5.4vw, 58px);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  font-variant-numeric: tabular-nums;
+  line-height: 1.05;
+}
+
+.metric__big .to {
+  color: var(--action-tint);
+}
+
+.metric__cap {
+  color: var(--ink-muted);
+  font-size: 14.5px;
+  line-height: 1.55;
+  margin-top: 12px;
+  max-width: 44ch;
+}
+
+.fineprint {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--faint);
+  margin-top: 26px;
+  letter-spacing: 0.02em;
+}
+
+/* Vows */
+.vows {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin-top: 44px;
+}
+
+.vow {
+  background: var(--surface);
+  border: 1px solid var(--hairline);
+  border-left: 3px solid var(--signal);
+  border-radius: var(--radius-md);
+  padding: 22px 24px;
+  box-shadow: var(--shadow-raised);
+}
+
+.vow b {
+  display: block;
+  font-size: 16px;
+  margin-bottom: 6px;
+}
+
+.vow span {
+  color: var(--ink-muted);
+  font-size: 14px;
+  line-height: 1.55;
+}
+
+.vow em {
+  font-family: var(--font-mono);
+  font-style: normal;
+  font-size: 12.5px;
+  color: var(--action);
+}
+
+/* Who */
+.who-grid {
+  display: grid;
+  grid-template-columns: 1.2fr 0.8fr;
+  gap: 48px;
+  margin-top: 36px;
+  align-items: start;
+}
+
+.who-grid ul {
+  margin: 0;
+  padding-left: 20px;
+}
+
+.who-grid li {
+  color: var(--ink-muted);
+  font-size: 15px;
+  line-height: 1.6;
+  margin-bottom: 12px;
+}
+
+.who-grid li b {
+  color: var(--ink);
+}
+
+.not-you {
+  border: 1px dashed var(--hairline-strong);
+  border-radius: 10px;
+  padding: 24px 26px;
+  font-size: 14.5px;
+  line-height: 1.6;
+  color: var(--ink-muted);
+}
+
+.not-you b {
+  color: var(--warning);
+}
+
+/* Finale */
+.home-finale {
+  position: relative;
+  overflow: hidden;
+  text-align: center;
+}
+
+.home-finale__inner {
+  position: relative;
+  padding: 110px 0 100px;
+}
+
+.home-finale .lede {
+  margin: 18px auto 40px;
+}
+
+.home-finale .cta-row {
+  justify-content: center;
+}
+
+.cohort-line {
+  margin-top: 26px;
+  font-size: 13.5px;
+  color: var(--faint);
+}
+
+.home-footer {
+  border-top: 1px solid var(--hairline);
+  padding: 30px 24px;
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--faint);
+  letter-spacing: 0.06em;
+  background: var(--canvas-deep);
+}
+
+/* Brand page */
+.brand-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+  gap: 12px;
+}
+
+.brand-tile {
+  margin: 0;
+  border: 1px solid var(--hairline);
+  border-radius: 12px;
+  padding: 22px 16px 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.brand-tile--dark {
+  background: #0e1c17;
+}
+
+.brand-tile--light,
+.brand-tile--plain {
+  background: #fff;
+}
+
+.brand-tile--brand {
+  background: #0a6c86;
+}
+
+.brand-tile figcaption {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.brand-tile figcaption b {
+  font-size: 12.5px;
+  color: var(--ink);
+}
+
+.brand-tile--dark figcaption b,
+.brand-tile--brand figcaption b {
+  color: #f4f8f3;
+}
+
+.brand-tile figcaption code,
+.brand-swatch code {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--faint);
+}
+
+.brand-tile--dark figcaption code,
+.brand-tile--brand figcaption code {
+  color: rgba(244, 248, 243, 0.6);
+}
+
+.brand-swatches {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.brand-swatch {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid var(--hairline);
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-size: 12.5px;
+  background: var(--surface);
+}
+
+.brand-swatch__chip {
+  width: 18px;
+  height: 18px;
+  border-radius: 5px;
+  border: 1px solid var(--hairline);
+}
+
+.brand-rules {
+  padding-left: 20px;
+}
+
+.brand-rules li {
+  font-size: 14px;
+  line-height: 1.7;
+  color: var(--ink-muted);
+}
+
+/* Signal Loader specimen (/brand) */
+.signal-specimen {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+  align-items: stretch;
+}
+
+.signal-specimen__card {
+  flex: 1;
+  min-width: 260px;
+  background: var(--white, #fff);
+  border: 1px solid var(--hairline);
+  border-radius: 12px;
+  box-shadow: 0 1px 2px rgba(18, 33, 28, 0.05), 0 8px 24px rgba(18, 33, 28, 0.06);
+  padding: 28px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+}
+
+.signal-specimen__card--stack {
+  align-items: stretch;
+  gap: 22px;
+}
+
+.signal-specimen__row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.signal-specimen__rule {
+  height: 1px;
+  background: var(--hairline);
+}
+
+.signal-specimen .btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Legal documents */
+.legal-doc {
+  max-width: 760px;
+  padding-top: 56px;
+  padding-bottom: 72px;
+}
+
+.legal-doc h2 {
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: -0.015em;
+  margin: 36px 0 10px;
+}
+
+.legal-doc p,
+.legal-doc li {
+  font-size: 14.5px;
+  line-height: 1.65;
+  color: var(--ink-muted);
+}
+
+.legal-doc p b,
+.legal-doc li b {
+  color: var(--ink);
+}
+
+.legal-doc a {
+  color: var(--action);
+  text-decoration: underline;
+  text-decoration-color: color-mix(in srgb, var(--action) 40%, transparent);
+}
+
+.legal-doc ul {
+  padding-left: 22px;
+  margin: 10px 0;
+}
+
+.legal-doc .legal-doc__foot {
+  margin-top: 56px;
+  padding-top: 20px;
+  border-top: 1px solid var(--hairline);
+  font-size: 12.5px;
+  color: var(--faint);
+}
+
+/* Docs page */
+.docs-nav__link {
+  font-size: 12.5px;
+  color: var(--ink-muted);
+}
+
+.docs-nav__link:hover {
+  color: var(--ink);
+}
+
+.docs-section {
+  padding: 26px 0 6px;
+  border-top: 1px solid var(--hairline);
+  margin-top: 26px;
+}
+
+.docs-section:first-of-type {
+  border-top: none;
+  margin-top: 0;
+}
+
+.docs-section h1 {
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin-bottom: 12px;
+}
+
+.docs-section pre {
+  background: var(--surface);
+  border: 1px solid var(--hairline);
+  border-radius: 8px;
+  padding: 14px 16px;
+  overflow-x: auto;
+  font-size: 12px;
+  line-height: 1.55;
+  margin: 12px 0;
+}
+
+.docs-section code {
+  font-family: 'Spline Sans Mono', monospace;
+  font-size: 0.92em;
+}
+
+.docs-loading {
+  display: flex;
+  justify-content: center;
+  padding: 48px 0 64px;
+}
+
+.home-footer__links a {
+  color: inherit;
+}
+
+.home-footer__links a:hover {
+  color: var(--ink-muted);
+}
+
+@media (max-width: 840px) {
+  .engine-cards {
+    grid-template-columns: 1fr;
+  }
+  .metrics,
+  .vows,
+  .who-grid {
+    grid-template-columns: 1fr;
+  }
+}

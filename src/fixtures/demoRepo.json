@@ -1,0 +1,15 @@
+{
+  "source": "fixture",
+  "name": "shiftpilot",
+  "url": "https://github.com/demo/shiftpilot",
+  "description": "AI agent that drafts fair on-call rotations from your team's calendar and incident history",
+  "language": "TypeScript",
+  "stars": 214,
+  "topics": ["ai-agents", "scheduling", "devtools"],
+  "readmeHeadings": ["ShiftPilot", "Why", "Quick start", "Agent setup", "Roadmap"],
+  "deps": ["react", "hono", "@anthropic-ai/sdk", "zod"],
+  "aiDeps": ["@anthropic-ai/sdk"],
+  "agentFiles": ["CLAUDE.md", ".cursor"],
+  "hasLicense": false,
+  "hasBusinessBrain": false
+}

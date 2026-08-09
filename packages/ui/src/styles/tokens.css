@@ -1,0 +1,374 @@
+/* ============================================================
+   Signal — design tokens (UNIFIED, D-0073)
+   ============================================================
+
+   ONE token system. Roles are named by ROLE, never by surface, and
+   every role is declared in BOTH surface blocks or neither.
+
+   Why this file was rewritten (2026-07-28): Signal v2 shipped its own
+   token file scoped to `.signal2`, which redefined role NAMES that v1
+   already owned but with different SEMANTICS — v1's `--ink` means "ink
+   on the current surface", v2's meant "ink on light". Custom properties
+   resolve to the NEAREST setter, so any v1 component rendered inside a
+   v2 scope silently took the wrong surface's colours: measured live,
+   `--ink` resolved to the dark ink inside `.signal2` on the DARK theme
+   while resolving correctly at the document root. That failure is
+   invisible — unreadable text, not an error — so it reaches customers
+   before it reaches CI. The dark-on-dark wordmark (D-0071) was one
+   instance of a systemic fault.
+
+   The structural fix: `.signal2` was doing TWO jobs — component
+   vocabulary scope AND surface declaration. Those have different
+   correct scopes, which is why `<Band light><div class="signal2">`
+   inverted. Here, SURFACE is the only thing that declares roles, and
+   it is declared in exactly one place: a [data-surface] / .on-* block.
+
+   Layers:
+     1. :where(html)  — surface-CONSTANT only (fonts, space, radii,
+        geometry, the private base palette). :where() keeps specificity
+        at 0,0,0 so any surface block wins regardless of source order.
+     2. surface blocks — every role, both vocabularies, one list.
+     3. .signal2 declares NO custom properties.
+
+   The base palette below is PRIVATE. Nothing outside this file may
+   reference --*-on-dark / --*-on-light directly; use the roles.
+   ============================================================ */
+
+:where(html) {
+  /* Fonts */
+  --font-sans: 'Familjen Grotesk', system-ui, -apple-system, sans-serif;
+  --font-mono: 'Spline Sans Mono', ui-monospace, Menlo, monospace;
+  --font-serif: 'Newsreader', Georgia, serif;
+  /* v2 aliases — same families, the names the s2-* rules use */
+  --font-ui: var(--font-sans);
+  --font-data: var(--font-mono);
+  --font-serif-statement: var(--font-serif);
+
+  /* ── PRIVATE base palette — never referenced outside this file ── */
+  --evergreen: #0e1c17;
+  --deep-canvas: #0a1712;
+  --paper: #f3f6f2;
+  --white: #ffffff;
+  --surface-dark-1: #17281f;
+  --surface-dark-2: #1f3329;
+  --ink-on-dark: #f4f8f3;
+  --ink-on-light: #12211c;
+  --ink-muted-on-dark: #b7cbc1;
+  --ink-muted-on-light: #3a463f;
+  --faint-on-dark: #88a094;
+  --faint-on-light: #5f7067;   /* AA-corrected: 4.6:1 on the darkest light bg in use (was #6a7d73, 4.0) */
+  /* D-0119 — one cyan action family across paper, dark and Void. */
+  --action-on-dark: #0e7e9e;
+  --action-on-light: #0a6c86;
+  --action-hover-on-dark: #1192b7;
+  --action-hover-on-light: #07556c;
+  --tint-on-dark: #4fd4f2;
+  --tint-on-light: #0a6c86;
+  --tint-hover-on-dark: #8af0ff;
+  --tint-hover-on-light: #07556c;
+  --signal-on-dark: #16c97a;
+  --signal-on-light: #0e7a52;
+  --warning-on-dark: #f5b14a;
+  --warning-on-light: #96601a; /* AA-corrected: 4.8:1 on paper (was #b5731f, 3.5) */
+  --error-on-dark: #ff6b5c;
+  /* A solid alert bar (frame 11) carries WHITE text, so its fill must stay
+     deep on BOTH surfaces — the dark-surface error is a light coral and
+     would put white on white. Hence a danger FILL distinct from the danger
+     text role, exactly as --accent-fill is distinct from --accent. */
+  --error-on-light: #bc4338;   /* AA-corrected: 4.8:1 on paper (was #c4463a, exactly 4.50 — on the line) */
+  --hairline-on-dark: rgba(255, 255, 255, 0.1);
+  --hairline-on-light: rgba(18, 33, 28, 0.12);
+  --light-catch: rgba(255, 255, 255, 0.14);
+
+  /* Void — for manipulable objects, never a user-selectable theme (D-0119). */
+  --void-0: #04070c;
+  --void-1: #0a1824;
+  --glass-1: rgba(20, 42, 56, 0.42);
+  --glass-2: rgba(24, 52, 68, 0.55);
+  --glass-3: rgba(28, 60, 78, 0.62);
+  --ink-on-void: #e9f7ff;
+  --body-on-void: #c9dde8;
+  --faint-on-void: #6fa0b8;
+  --meta-on-void: #bff3ff;
+  --action-on-void: #38e1ff;
+  --action-fill-on-void: rgba(56, 225, 255, 0.2);
+  --caution-on-void: #f2c14e;
+  --error-on-void: #ff3d6e;
+  --hairline-on-void: rgba(120, 220, 255, 0.14);
+  --hairline-strong-on-void: rgba(120, 220, 255, 0.22);
+  --light-catch-on-void: rgba(180, 240, 255, 0.38);
+  --blur-void-1: blur(14px);
+  --blur-void-2: blur(18px) saturate(1.2);
+  --blur-void-3: blur(24px) saturate(1.25);
+  --bloom-void: 0 0 40px rgba(56, 225, 255, 0.06);
+
+  /* Fixed canvases (chrome that is always one surface) */
+  --canvas-dark: #0e1c17;
+  --canvas-deep: #0a1712;
+  --canvas-light: #f3f6f2;
+
+  /* D-0119 supersedes D-0049's surface-constant sapphire. D-0050 lockup
+     geometry is unchanged; each surface block now resolves the machine half
+     from the approved cyan family. */
+  --wordmark-iq: var(--action-on-light);
+  --pale-blue: #cfe0ff;
+  --depth-gradient: linear-gradient(180deg, #1c3128 0%, #152419 100%);
+  --gate-grad-top: #1c3128;
+  --gate-grad-bottom: #152419;
+
+  /* Space scale — 4pt */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 48px;
+
+  /* Radius */
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-pill: 24px;
+  /* v2 names */
+  --radius-chip: 5px;
+  --radius-btn-sm: 7px;
+  --radius-btn: 8px;
+  --radius-card: 12px;
+  --radius-void-sm: 2px;
+  --radius-void-md: 3px;
+
+  /* Motion vocabulary from the Atlas handoff. Durations are tokens so the
+     renderer and its DOM chrome share one cadence. */
+  --motion-drift: 34s;
+  --motion-drift-alt: 46s;
+  --motion-scan: 9s;
+  --motion-ripple: 7.7s;
+  --motion-pulse-travel: 6.2s;
+  --motion-breathe: 11s;
+  --ease-ambient: ease-in-out;
+  --ease-fly: cubic-bezier(0.65, 0, 0.35, 1);
+
+  /* Elevation geometry. The VALUE is surface-dependent (see blocks) so
+     `box-shadow: var(--shadow-lift)` self-suppresses on dark instead of
+     needing a [data-surface='light'] descendant selector — the pattern
+     that silently flattened Settings' panels. */
+  --shadow-overlay: 0 24px 60px -30px rgba(18, 33, 28, 0.5);
+  --shadow-hero: 0 40px 90px -50px rgba(18, 33, 28, 0.7);
+
+  /* Popover (reasoning trace) — always dark, regardless of band */
+  --popover-bg: #1f3329;
+  --popover-border: rgba(95, 134, 238, 0.45);
+
+  /* Paper grain (light surfaces): applied as background-image */
+  --paper-grain: radial-gradient(rgba(18, 33, 28, 0.03) 1px, transparent 1px);
+  --paper-grain-size: 4px 4px;
+
+  /* Default surface = light, for anything rendered outside a Band (the
+     marketing site sets no data-surface on <html>). Inert in the app:
+     [data-surface] at (0,1,0) always beats :where() at (0,0,0). */
+  --canvas: var(--paper);
+  --surface: var(--white);
+  --surface-1: var(--white);
+  --surface-2: var(--white);
+  --text-primary: var(--ink-on-light);
+  --text-body: var(--ink-muted-on-light);
+  --text-faint: var(--faint-on-light);
+  --accent: var(--tint-on-light);
+  --accent-fill: var(--action-on-light);
+  --accent-fill-hover: var(--action-hover-on-light);
+  --accent-hover: var(--tint-hover-on-light);
+  --on-accent-fill: var(--white);
+  --positive: var(--signal-on-light);
+  --caution: var(--warning-on-light);
+  --danger: var(--error-on-light);
+  --hairline: var(--hairline-on-light);
+  --hairline-catch: var(--hairline-on-light);
+  --hairline-strong: rgba(18, 33, 28, 0.22);
+  --chart-faint: #a2ada5;
+  --row-rule: rgba(18, 33, 28, 0.07);
+  --wash-caution: #fdf8f1;
+  --wash-subheader: #fbfcfa;
+  --shadow-lift: 0 10px 26px -18px rgba(18, 33, 28, 0.5);
+  --shadow-raised: 0 8px 24px -16px rgba(18, 33, 28, 0.4);
+  --chrome: var(--white);
+  --danger-fill: var(--error-on-light);
+  --on-danger-fill: var(--white);
+
+  --grain: var(--paper-grain);
+  --action-hover: var(--accent-fill-hover);
+  --ink: var(--text-primary);
+  --ink-muted: var(--text-body);
+  --faint: var(--text-faint);
+  --action: var(--accent-fill);
+  --action-tint: var(--accent);
+  --signal: var(--positive);
+  --warning: var(--caution);
+  --error: var(--danger);
+  --reasoning: var(--accent);
+}
+
+/* ---------- Dark surface: the machine is working ---------- */
+[data-surface='dark'],
+.on-dark {
+  /* v2 role vocabulary */
+  --canvas: var(--evergreen);
+  --surface: var(--surface-dark-1);
+  --surface-1: var(--surface-dark-1);
+  --surface-2: var(--surface-dark-2);
+  --text-primary: var(--ink-on-dark);
+  --text-body: var(--ink-muted-on-dark);
+  --text-faint: var(--faint-on-dark);
+  --accent: var(--tint-on-dark);
+  --accent-fill: var(--action-on-dark);
+  --accent-fill-hover: var(--action-hover-on-dark);
+  --accent-hover: var(--tint-hover-on-dark);
+  --on-accent-fill: var(--white);
+  --positive: var(--signal-on-dark);
+  --caution: var(--warning-on-dark);
+  --danger: var(--error-on-dark);
+  --hairline: var(--hairline-on-dark);
+  --hairline-catch: var(--light-catch);
+  --hairline-strong: rgba(255, 255, 255, 0.25);
+  --chart-faint: var(--faint-on-dark);
+  --row-rule: rgba(255, 255, 255, 0.07);
+  /* Washes must FLIP with the surface. A literal light wash on evergreen
+     is what made Sessions' attention tiles unreadable (~1:1 contrast). */
+  --wash-caution: color-mix(in srgb, var(--caution) 10%, var(--surface));
+  --wash-subheader: var(--surface-2);
+  /* Dark uses hairlines, never shadow — so the role resolves to none. */
+  --shadow-lift: none;
+  --shadow-raised: none;
+  /* Mark polarity rides the surface (was a hardcoded descendant rule). */
+  --wordmark-mark-dark: block;
+  --wordmark-mark-light: none;
+  --wordmark-iq: var(--tint-on-dark);
+  /* Chrome behind the canvas (header, mobile tab bar, the home rail).
+     Frame 12 gives it #FFFFFF on light / #0A1712 on dark. A role, not the
+     private literal, so it follows the user's mode (D-0074). */
+  --chrome: var(--deep-canvas);
+  --danger-fill: var(--error-on-light);
+  --on-danger-fill: var(--white);
+
+  /* Paper grain is a LIGHT-surface texture; as a role it self-suppresses on
+     dark instead of needing a [data-surface] descendant selector. */
+  --grain: none;
+
+  /* v1 vocabulary — ALIASES of the same roles, never literals. Deleted
+     in the final migration step once no CSS references them. */
+  --ink: var(--text-primary);
+  --ink-muted: var(--text-body);
+  --faint: var(--text-faint);
+  --action: var(--accent-fill);
+  --action-hover: var(--accent-fill-hover);
+  --action-tint: var(--accent);
+  --signal: var(--positive);
+  --warning: var(--caution);
+  --error: var(--danger);
+  --reasoning: var(--accent);
+}
+
+/* ---------- Light surface: a room for human judgment ---------- */
+[data-surface='light'],
+.on-light {
+  --canvas: var(--paper);
+  --surface: var(--white);
+  --surface-1: var(--white);
+  --surface-2: var(--white);
+  --text-primary: var(--ink-on-light);
+  --text-body: var(--ink-muted-on-light);
+  --text-faint: var(--faint-on-light);
+  --accent: var(--tint-on-light);
+  --accent-fill: var(--action-on-light);
+  --accent-fill-hover: var(--action-hover-on-light);
+  --accent-hover: var(--tint-hover-on-light);
+  --on-accent-fill: var(--white);
+  --positive: var(--signal-on-light);
+  --caution: var(--warning-on-light);
+  --danger: var(--error-on-light);
+  --hairline: var(--hairline-on-light);
+  --hairline-catch: var(--hairline-on-light);
+  --hairline-strong: rgba(18, 33, 28, 0.22);
+  --chart-faint: #a2ada5;
+  --row-rule: rgba(18, 33, 28, 0.07);
+  --wash-caution: #fdf8f1;
+  --wash-subheader: #fbfcfa;
+  --shadow-lift: 0 10px 26px -18px rgba(18, 33, 28, 0.5);
+  --shadow-raised: 0 8px 24px -16px rgba(18, 33, 28, 0.4);
+  --wordmark-mark-dark: none;
+  --wordmark-mark-light: block;
+  --wordmark-iq: var(--action-on-light);
+  --chrome: var(--white);
+  --danger-fill: var(--error-on-light);
+  --on-danger-fill: var(--white);
+
+  --grain: var(--paper-grain);
+
+  --ink: var(--text-primary);
+  --ink-muted: var(--text-body);
+  --faint: var(--text-faint);
+  --action: var(--accent-fill);
+  --action-hover: var(--accent-fill-hover);
+  --action-tint: var(--accent);
+  --signal: var(--positive);
+  --warning: var(--caution);
+  --error: var(--danger);
+  --reasoning: var(--accent);
+}
+
+/* ---------- Void surface: the founder is handling the object ---------- */
+/* D-0125: under D-0124 the whole authenticated app is Void. Geometry cuts
+   to 2/3px so every lens card inherits Void radii without per-file rewrites.
+   --radius-pill stays (pills are intentionally round). */
+.on-void {
+  --canvas: var(--void-0);
+  --surface: var(--glass-2);
+  --surface-1: var(--glass-1);
+  --surface-2: var(--glass-3);
+  --text-primary: var(--ink-on-void);
+  --text-body: var(--body-on-void);
+  --text-faint: var(--faint-on-void);
+  --accent: var(--action-on-void);
+  --accent-fill: var(--action-fill-on-void);
+  --accent-fill-hover: color-mix(in srgb, var(--action-on-void) 28%, transparent);
+  --accent-hover: var(--meta-on-void);
+  --on-accent-fill: var(--ink-on-void);
+  --positive: var(--action-on-void);
+  --caution: var(--caution-on-void);
+  --danger: var(--error-on-void);
+  --hairline: var(--hairline-on-void);
+  --hairline-catch: var(--light-catch-on-void);
+  --hairline-strong: var(--hairline-strong-on-void);
+  --chart-faint: var(--faint-on-void);
+  --row-rule: var(--hairline-on-void);
+  --wash-caution: color-mix(in srgb, var(--caution-on-void) 10%, transparent);
+  --wash-subheader: var(--glass-1);
+  --shadow-lift: 0 14px 34px rgba(0, 0, 0, 0.4);
+  --shadow-raised: 0 22px 60px rgba(0, 0, 0, 0.55);
+  --wordmark-mark-dark: block;
+  --wordmark-mark-light: none;
+  --wordmark-iq: var(--action-on-void);
+  --chrome: var(--void-0);
+  --danger-fill: var(--error-on-void);
+  --on-danger-fill: var(--ink-on-void);
+  --grain: none;
+
+  --radius-sm: var(--radius-void-sm);
+  --radius-md: var(--radius-void-md);
+  --radius-lg: var(--radius-void-md);
+  --radius-chip: var(--radius-void-sm);
+  --radius-btn-sm: var(--radius-void-sm);
+  --radius-btn: var(--radius-void-sm);
+  --radius-card: var(--radius-void-md);
+
+  --ink: var(--text-primary);
+  --ink-muted: var(--text-body);
+  --faint: var(--text-faint);
+  --action: var(--accent-fill);
+  --action-hover: var(--accent-fill-hover);
+  --action-tint: var(--accent);
+  --signal: var(--positive);
+  --warning: var(--caution);
+  --error: var(--danger);
+  --reasoning: var(--accent);
+}
